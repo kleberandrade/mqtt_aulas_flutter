@@ -10,4 +10,5 @@ abstract interface class MqttTransport {
   Stream<void> get disconnected;
   void close();
 }
+
 typedef TransportFactory = MqttTransport Function();
