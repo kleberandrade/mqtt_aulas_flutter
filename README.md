@@ -3,7 +3,7 @@
 [![Flutter](https://img.shields.io/badge/Flutter-3.41.9-02569B?logo=flutter)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.11-0175C2?logo=dart)](https://dart.dev/)
 [![MQTT](https://img.shields.io/badge/MQTT-3.1.1-660066?logo=mqtt)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
-[![CI configured](https://img.shields.io/badge/CI-configured%20%E2%80%A2%20not%20yet%20run-lightgrey?logo=githubactions)](.github/workflows/ci.yml)
+[![CI](https://github.com/kleberandrade/mqtt_aulas_flutter/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/kleberandrade/mqtt_aulas_flutter/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 A local-first MQTT learning app for **Android and Web**, based on Kleber Andrade's original IoT lesson repository. Connect to your own broker, explore topic filters, and publish explicitly simulated telemetry. No broker is contacted until you choose **Connect**; no public broker is configured.
@@ -106,7 +106,7 @@ docker compose down
 
 Ordinary tests never contact a broker; integration tests require the explicit flag. Run native integrations serially because one test deliberately restarts **this Compose project's broker** to verify reconnect and resubscription. Do not run that test against a shared broker. The Chrome test validates the real browser WebSocket adapter, not native TCP.
 
-Local validation: analyzer, unit/widget tests, real TCP/WebSocket QoS roundtrips, broker-restart recovery, Chrome WebSocket test, simulated publisher, Web release build and Android debug build. No physical-device, live TLS or app-store validation is claimed. [CI](.github/workflows/ci.yml) pins Flutter, action commits, dependencies and broker image digest; its remote execution remains unverified until these local commits are pushed. This work did not push or deploy. See [work log](docs/WORK_LOG.md).
+Local validation: analyzer, unit/widget tests, real TCP/WebSocket QoS roundtrips, broker-restart recovery, Chrome WebSocket test, simulated publisher, Web release build and Android debug build. No physical-device, live TLS or app-store validation is claimed. [CI](.github/workflows/ci.yml) pins Flutter, action commits, dependencies and broker image digest; the linked GitHub Actions badge reports the current remote result for `master`. The workflow runs on pushes and pull requests; it does not deploy the app. See [work log](docs/WORK_LOG.md).
 
 ## Code map
 

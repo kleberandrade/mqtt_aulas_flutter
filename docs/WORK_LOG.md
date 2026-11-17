@@ -1,5 +1,7 @@
 # Implementation log
 
+## Initial local delivery
+
 - Inspected the original repository: README, MIT license and ignore rules only; clean working tree. Preserved original copyright.
 - Read requested ub-mode guidance. Scope: Android and browser, MQTT 3.1.1, local broker, no public broker defaults and no push.
 - Flutter 3.41.9 / Dart 3.11.5 available. Android doctor reports unaccepted SDK licenses; no physical device connected.
@@ -23,3 +25,9 @@
 - YAML syntax checks and git whitespace checks passed. This does not claim a GitHub Actions run or bit-for-bit artifact reproducibility.
 - Closed the temporary HTTP server and removed only this project's Compose broker/network after verification. Retained build outputs locally; no unrelated worktrees or containers were removed.
 - Limitations: no physical Android device, no live TLS/WSS broker or mutual TLS validation, no production signing/deployment, no remote CI run; crapper/dryer/mutator cannot inspect Dart. Unit/widget LCOV is available locally in coverage/lcov.info; no mutation score is claimed.
+
+## Publication follow-up · 2026-11-17
+
+- User explicitly authorized pushing the five implementation commits and monitoring GitHub Actions through success, including necessary fixes.
+- Pushed master through b5b00fe; GitHub started CI run 44007926959 with verify and android jobs.
+- Replaced the pre-publication CI badge/README wording with the actual master workflow badge. This documentation follow-up will trigger a fresh run, which is the run to monitor for the final delivered commit. CI results will be reported with a verified run link after completion; no deployment is authorized or configured.
