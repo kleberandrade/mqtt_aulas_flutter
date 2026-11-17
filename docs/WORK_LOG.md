@@ -31,3 +31,13 @@
 - User explicitly authorized pushing the five implementation commits and monitoring GitHub Actions through success, including necessary fixes.
 - Pushed master through b5b00fe; GitHub started CI run 44007926959 with verify and android jobs.
 - Replaced the pre-publication CI badge/README wording with the actual master workflow badge. This documentation follow-up will trigger a fresh run, which is the run to monitor for the final delivered commit. CI results will be reported with a verified run link after completion; no deployment is authorized or configured.
+
+## Tag-based release automation · 2026-11-17
+
+- User requested future `v*` tags to build and publish the debug APK and SHA-256 checksum with English notes. Existing v1.0.0 must remain unchanged.
+- Reused the complete CI workflow for release checks and the Android APK. Added a read-only packaging job and a separate contents-write publishing job; no new credentials or signing key are stored.
+- Wrote failing preparation tests before implementation (missing module), then passed tests for exact artifact bytes, checksums, tag/version validation, prereleases and English metadata. Added publishing boundary tests for retryable draft failures, no publication before upload completion, checksum tampering and preservation of completed releases.
+- Added a manual preparation-only workflow run to validate CI and packaging without creating a synthetic version tag or modifying the existing release. A real future tag is required to exercise live publication; CLI publication behavior is tested locally with a fake boundary.
+- Documented semantic version/build-number updates, tag push commands, manual rehearsal, debug signing differences and artifact retention. Action revisions are pinned to verified official repository SHAs.
+- Local checks passed: 19 release-tool tests, real-APK packaging with independently verified SHA-256, Python compilation and actionlint v1.7.12 for both workflow files. The official actionlint binary checksum was verified before use.
+- Unlike the earlier Dart code, these Python helpers are supported by crapper/dryer/mutator: all measured functions had CRAP <= 6; dryer found no candidates at 0.8; mutation testing killed all 68 discovered sites after adding boundary regressions. GitHub CLI publication itself is tested through fake process/API boundaries, not by creating an extra public release.

@@ -16,3 +16,6 @@ android/key.properties
 .env
 .flutter-plugins
 .flutter-plugins-dependencies
+__pycache__/
+target/
+.coverage*
