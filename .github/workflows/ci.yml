@@ -1,11 +1,18 @@
 name: CI
 on:
   push:
+    branches: ['**']
   pull_request:
+  workflow_call:
+    inputs:
+      upload_apk:
+        description: Retain the Android debug APK for the calling release workflow.
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   verify:
@@ -17,6 +24,7 @@ jobs:
         with:
           flutter-version: '3.41.9'
           channel: stable
+      - run: python3 -m unittest discover -s tool/tests -v
       - run: flutter pub get --enforce-lockfile
       - run: dart format --output=none --set-exit-if-changed lib test tool
       - run: flutter analyze --fatal-infos
@@ -50,3 +58,12 @@ jobs:
           channel: stable
       - run: flutter pub get --enforce-lockfile
       - run: flutter build apk --debug
+      - name: Retain APK for release packaging
+        if: inputs.upload_apk
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: android-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true

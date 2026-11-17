@@ -106,7 +106,32 @@ docker compose down
 
 Ordinary tests never contact a broker; integration tests require the explicit flag. Run native integrations serially because one test deliberately restarts **this Compose project's broker** to verify reconnect and resubscription. Do not run that test against a shared broker. The Chrome test validates the real browser WebSocket adapter, not native TCP.
 
-Local validation: analyzer, unit/widget tests, real TCP/WebSocket QoS roundtrips, broker-restart recovery, Chrome WebSocket test, simulated publisher, Web release build and Android debug build. No physical-device, live TLS or app-store validation is claimed. [CI](.github/workflows/ci.yml) pins Flutter, action commits, dependencies and broker image digest; the linked GitHub Actions badge reports the current remote result for `master`. The workflow runs on pushes and pull requests; it does not deploy the app. See [work log](docs/WORK_LOG.md).
+Local validation: analyzer, unit/widget tests, real TCP/WebSocket QoS roundtrips, broker-restart recovery, Chrome WebSocket test, simulated publisher, Web release build and Android debug build. No physical-device, live TLS or app-store validation is claimed. [CI](.github/workflows/ci.yml) pins Flutter, action commits, dependencies and broker image digest; the linked GitHub Actions badge reports the current remote result for `master`. CI runs on branch pushes and pull requests, and is reused by the tag release workflow. It does not deploy a hosted app. See [work log](docs/WORK_LOG.md).
+
+## Automated GitHub releases
+
+Pushing a **new `v*` tag** runs the complete CI workflow, builds an Android **debug APK**, computes its SHA-256 checksum, prepares English notes from [the release template](docs/RELEASE_NOTES.md), and publishes a GitHub Release with both files attached. The `v` prefix is required; the remaining semantic version must exactly match `pubspec.yaml` before its `+BUILD` suffix. The build number must be a positive Android version code. Tags such as `v1.1.0-rc.1` produce a GitHub prerelease rather than the latest stable release.
+
+For example, for the next patch release:
+
+1. Change `pubspec.yaml` to `version: 1.0.1+2` and commit the intended source changes.
+2. Push the commit, then create and push the version tag:
+
+```sh
+git push origin master
+git tag -a v1.0.1 -m "Release v1.0.1"
+git push origin v1.0.1
+```
+
+3. Follow **Actions → Release**. After every check succeeds, the release contains `mqtt-lab-v1.0.1-debug.apk` and `mqtt-lab-v1.0.1-debug.apk.sha256`.
+
+A published release is preserved on reruns. An incomplete draft can be retried; it becomes public only after both uploads succeed. Existing public releases with missing assets cause an error instead of silently replacing them. Release permissions are limited to the publishing job and use GitHub's built-in token; no additional repository secret or production signing key is needed.
+
+For a non-publishing rehearsal, open **Actions → Release → Run workflow** on a branch. Manual runs exercise CI and packaging and retain an Actions artifact named `release-bundle` for seven days, with the APK, checksum, notes and metadata. **Manual runs never publish**, including when launched on a tag. A real tag-triggered publication should be verified on the next intended version; the existing `v1.0.0` release does not need to be recreated.
+
+Verify a downloaded APK with `sha256sum -c mqtt-lab-v1.0.1-debug.apk.sha256` (macOS: `shasum -a 256 -c ...`). Debug keys generated on fresh hosted runners can differ between builds; upgrading an installed test APK may require uninstalling it first, which clears its app data. These APKs are for testing, with no production-signing or physical-device validation claim.
+
+Release tooling tests can also run locally with `python3 -m unittest discover -s tool/tests -v` (Python 3.9+). They verify version/tag rejection, exact file/checksum generation, English notes, prerelease flags, interrupted uploads and preservation of published releases, using temporary files and a fake GitHub CLI boundary. They do not create test releases on GitHub.
 
 ## Code map
 
