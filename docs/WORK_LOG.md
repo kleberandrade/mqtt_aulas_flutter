@@ -17,3 +17,9 @@
 - Analyzer passed with fatal infos; final ordinary suite passed 11 tests (3 local integration cases skipped by design). Native local integrations passed all 3 serially; Chrome integration passed 1.
 - Executed crapper/dryer/mutator against lib: all reported no source files to analyze/mutate, consistent with missing Dart support. No complexity, duplication or mutation pass is inferred from these no-op scans.
 - CI uses verified action commit IDs, Flutter 3.41.9, committed pubspec.lock and a pinned Mosquitto image digest. Remote CI has not run because commits remain local.
+- Visually exercised the compiled Web app in Chrome: Connect → Subscribe → Generate simulated telemetry → Publish. The visible session became connected and history reported QUEUED and RECEIVED. Saved screenshots of the app and GitHub metadata under docs/images.
+- Added the pinned Cupertino icon font package after the Web compiler identified a missing adaptive-control font; no platform behavior was stubbed.
+- Final verification after the adaptive font fix: enforced lockfile, formatting, fatal-info analysis and all 11 ordinary tests passed; 3 broker integrations remain opt-in in ordinary runs. Both Web release and Android debug builds passed without the missing-font warning.
+- YAML syntax checks and git whitespace checks passed. This does not claim a GitHub Actions run or bit-for-bit artifact reproducibility.
+- Closed the temporary HTTP server and removed only this project's Compose broker/network after verification. Retained build outputs locally; no unrelated worktrees or containers were removed.
+- Limitations: no physical Android device, no live TLS/WSS broker or mutual TLS validation, no production signing/deployment, no remote CI run; crapper/dryer/mutator cannot inspect Dart. Unit/widget LCOV is available locally in coverage/lcov.info; no mutation score is claimed.
